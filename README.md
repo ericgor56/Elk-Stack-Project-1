@@ -1,10 +1,10 @@
-# Elk Stack Project
+# ELK Stack Project
 
 This document contains the following details
 * Technologies in use
 * Description of the topology
 * Acess Policies 
-* Elk Conifguration 
+* ELK Conifguration 
   * Beats in use
   * Virtual Machines being monitored
 * How to use the Ansible Build
@@ -34,12 +34,12 @@ The following has already been done to my network
   
   
 What I will be creating and installing
-* Elk Server VM
-* Seperate Virtual Network for elk server
+* ELK Server VM
+* Seperate Virtual Network for ELK server
 * Network Security Group For Elk Server
   * Allow port 22 from any source
   * Allow port 5601 from my-ip for GUI 
-* Seperate Vnet for elk server
+* Seperate Vnet for ELK server
 
 * Metricbeat
 * Filebeat
@@ -66,7 +66,7 @@ The configuration details of each machine may be found below.
 | Jump Box    | Gateway     | 10.0.0.4   | Linux            |
 | Web 1       | Web Server  | 10.0.0.7   | Linux            |
 | Web 2       | Web Server  | 10.0.0.8   | Linux            |
-| Elk server  | Monitor     | 10.1.0.4   | Linux           
+| ELK server  | Monitor     | 10.1.0.4   | Linux           
 
 
 ## Access Policies
@@ -86,7 +86,7 @@ A summary of the access policies in place can be found in the table below.
 | Jump Box    | Yes                 | 24.124.124.169       |
 | Web 1       | No                  | 10.0.0.7             |
 | Web 2       | No                  | 10.0.0.8             |
-| Elk server  | No                  | 10.1.0.4             |
+| ELK server  | No                  | 10.1.0.4             |
 
 ## Elk Configuration
 
@@ -94,34 +94,34 @@ Ansible was used to automate configuration of the ELK machine. No configuration 
 
 ### Part 1 - Creating Vnet and VM for ELK
 
-* I created a seperate virtual network form my elk stack VM with the same resource group (red-team) but a different region from my jump box, Web 1 and Web 2 servers.(elk-net)
+* I created a seperate virtual network form my ELK stack VM with the same resource group (red-team) but a different region from my jump box, Web 1 and Web 2 servers.(elk-net)
   * Subnet - 10.1.0.0/24
-* I added a peering connection from my elk vnet to my red team vnet and named it elk-to-red
-* I created a virtual machine for my elk server
+* I added a peering connection from my ELK vnet to my red team vnet and named it elk-to-red
+* I created a virtual machine for my ELK server
   * Same resource group as my other 3 virtual machines
   * Size - Standard D2s V3 
-  * Same region as my elk-vnet
+  * Same region as my ELK-vnet
   * I used the pub ssh key from my jump box ansible container 
-  * Elk-vnet for virtual network
+  * ELK-vnet for virtual network
   * Inbound ports 22
  
  
  ### Part 2 - Configuring ELK
  
  * SSH into my jump box and attach to my ansible container 
- * Added my elk VM private ip to my [hosts](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Ansible%20hosts%20file) file in ansible directory
+ * Added my ELK VM private ip to my [hosts](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Ansible%20hosts%20file) file in ansible directory
    * Create a [elk] group seperate from [webservers] group
    
 * Add this [elk config.yml](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Elk%20VM%20Playbook.yml) file in your ansible playbooks directory. This playbook will also install docker.io and python3-pip.
 * Name the document what you want with the yml tag ex. elk.yml
 * Run the playbook while in the directory using the `ansible-playbook` command 
-* Once the playbook has ran and you run into no filed tasks you can ssh into your elk container and run `sudo docker ps` or  `sudo container list -a` to see that the container is installed and running.
+* Once the playbook has ran and you run into no filed tasks you can ssh into your ELK container and run `sudo docker ps` or  `sudo container list -a` to see that the container is installed and running.
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
 ![elk container image](https://user-images.githubusercontent.com/82241347/134846333-c9b4a6e6-3ea8-4551-9462-43b9fd4fcafa.png)
 
-* I created a inbound NSG rule in my elk server NSG to allow port 5601 from my ip at priority 100 so I can connect to kibana form my web browser.
+* I created a inbound NSG rule in my ELK server NSG to allow port 5601 from my ip at priority 100 so I can connect to kibana form my web browser.
 
 * I checked by running [elk-ip]:5601/app/kibana on your browser and saw the kibana landing page
 *  ![kibana home page](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Images/kibana-home-page.png)
@@ -137,7 +137,7 @@ This ELK server will be configured to monitor the following machines:
 Filebeat 
 
 * In my jump box ansible container I ran `curl` https://gist.githubusercontent.com/slape/5cc350109583af6cbe577bbcc0710c93/raw/eca603b72586fbe148c11f9c87bf96a63cb25760/Filebeat > /etc/ansible/filebeat-config.yml to get the filebeat config file 
-* I changed line 1106 and 1806 to my elk private ip and saved the config file
+* I changed line 1106 and 1806 to my ELK private ip and saved the config file
 * I created my [filebeat-playbook.yml](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/FIlebeat%20Playbook.yml) file in my /ansible/playbooks directory 
 * Run the playbook
 * Verified that kibana is recieving data by going to [elk-ip]:5601/app/kibana 
@@ -148,7 +148,7 @@ Filebeat
 
 Metricbeat
 * In my Jump box ansible docker under /etc/ansible I copied this [Metricbeat-config.yml](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Metricbeat%20config%20file)
- * Changed the private ip to my elk server ip
+ * Changed the private ip to my ELK server ip
 * Copied my [metricbeat-playbook.yml](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Metricbeat%20Playbook.yml) into /etc/anisble/playbooks
 * Ran the playbook
 * Verified in [elk-ip]:5601/apps/kibana that my Metricbeat module was recieving data
@@ -167,8 +167,8 @@ We have installed the following Beats on these machines:
 * Metricbeat
 
 These Beats allow us to collect the following information from each machine:
--Filebeat is used to monitor log data from our Web 1 and Web 2 virtual machines.It forwards the logs to our elk stack vm where we can open and see on the elk server GUI(kibana).
--Metricbeat is used to monitor services running and things such as cpu usage on our Web 1 and Web 2 virtual machines. You can see the metrics on the elk server GUI as well.
+-Filebeat is used to monitor log data from our Web 1 and Web 2 virtual machines.It forwards the logs to our ELK stack vm where we can open and see on the ELK server GUI(kibana).
+-Metricbeat is used to monitor services running and things such as cpu usage on our Web 1 and Web 2 virtual machines. You can see the metrics on the ELK server GUI as well.
 
 Below are some screenshots to show that kibana is picking up data from me prefroming invalid login attempts and a stress test
 * ![Here I preformed a stress test on my Web 1 vm](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Images/web%201%20stress%20test.png)
@@ -181,8 +181,8 @@ Thesee screenshots indicate that my Filebeat and Metricbeat have been installed 
 ## How to use Ansible Build
 * Turn on all your VMs 
 * ssh into jump-box and make sure your ansible contianer is running
-  * you can also ssh into elk VM to see if container is running if you have any issues connecting
-* Go to your browser and go to [elk-ip]:5601/apps/kibana 
+  * you can also ssh into ELK VM to see if container is running if you have any issues connecting
+* Go to your browser and go to [ELK-ip]:5601/apps/kibana 
   * Logs and metrics tab on left side
   * You can see both Web 1 and Web 2 or use a filter for a specific VM.
 
