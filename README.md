@@ -11,7 +11,8 @@ This document contains the following details
 
 ## Technologies in use
 
-This project is based in the Azure Virtual Network
+This project is based in the Azure Virtual Network.
+
 The following has already been done to my network
 * 3 virtual machines 
   * Jump box VM acting as a gateway to ssh from my ip to the virtual network
@@ -89,7 +90,7 @@ A summary of the access policies in place can be found in the table below.
 
 ## Elk Configuration
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because we can manually install all of the applications we need by using a playbook. Users can copy the playbooks provided and configure them  for their own installation.
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because we can install many applications we need by using a playbook. Users can copy the playbooks provided and configure them  for their own installation.
 
 ### Part 1 - Creating Vnet and VM for ELK
 
@@ -109,7 +110,7 @@ Ansible was used to automate configuration of the ELK machine. No configuration 
  
  * SSH into my jump box and attach to my ansible container 
  * Added my elk VM private ip to my [hosts](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Ansible%20hosts%20file) file in ansible directory
-   * Create a seperate [elk] group seperate from [webservers] group
+   * Create a [elk] group seperate from [webservers] group
    
 * Add this [elk config.yml](https://github.com/ericgor56/Elk-Stack-Project-1/blob/main/Ansible/Elk%20VM%20Playbook.yml) file in your ansible playbooks directory. This playbook will also install docker.io and python3-pip.
 * Name the document what you want with the yml tag ex. elk.yml
